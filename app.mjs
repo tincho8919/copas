@@ -36,6 +36,40 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+app.post(
+    '/', 
+    [
+        check('nombre').isLength({ min: 4 }),
+        check('email').isEmail(),
+        check('password').isLength({ min: 6 }),
+    ],
+    (req, res) => {
+
+    const { nombre, email, password } = req.body;
+
+    const errores = validationResult(req);
+
+    if (!errores.isEmpty()) {
+        return res.status(400).json({ error: 'Errores en los datos ingresados' });
+    }
+    
+
+    console.log('=======================================================');
+    
+    console.log(errores);
+    
+    console.log(`Los datos recibidos son ${nombre} - ${email} - ${password}`);
+    
+    console.log('=======================================================');
+
+    res.json({
+        nombre: nombre,
+        email: email,
+        password: password
+    });
+
+})
+
 app.get('/login', (req, res) => {
     
     res.render('login');
